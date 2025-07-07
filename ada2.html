@@ -1,0 +1,114 @@
+<!-- Stopwatch Web Application | Task-02 | Prodigy InfoTech -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stopwatch Web Application</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: #f2f2f2;
+      margin: 0;
+    }
+    h1 {
+      color: #333;
+    }
+    #time {
+      font-size: 4rem;
+      margin: 20px 0;
+      color: #222;
+    }
+    .buttons button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .start { background: #4caf50; color: white; }
+    .pause { background: #ff9800; color: white; }
+    .reset { background: #f44336; color: white; }
+    .lap { background: #2196f3; color: white; }
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 20px;
+      width: 200px;
+    }
+    li {
+      background: #fff;
+      padding: 8px;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>Stopwatch</h1>
+  <h3>Task-02<br>Prodigy InfoTech</h3>
+  <div id="time">00:00:00</div>
+  <div class="buttons">
+    <button class="start" onclick="startTimer()">Start</button>
+    <button class="pause" onclick="pauseTimer()">Pause</button>
+    <button class="reset" onclick="resetTimer()">Reset</button>
+    <button class="lap" onclick="recordLap()">Lap</button>
+  </div>
+  <ul id="laps"></ul>
+
+  <script>
+    let startTime = 0;
+    let elapsedTime = 0;
+    let timerInterval;
+
+    function updateTime() {
+      const time = Date.now() - startTime;
+      const total = new Date(time);
+      const hours = String(Math.floor(time / 3600000)).padStart(2, '0');
+      const minutes = String(total.getUTCMinutes()).padStart(2, '0');
+      const seconds = String(total.getUTCSeconds()).padStart(2, '0');
+      document.getElementById('time').textContent = ${hours}:${minutes}:${seconds};
+    }
+
+    function startTimer() {
+      if (!timerInterval) {
+        startTime = Date.now() - elapsedTime;
+        timerInterval = setInterval(updateTime, 1000);
+      }
+    }
+
+    function pauseTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        elapsedTime = Date.now() - startTime;
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      startTime = 0;
+      elapsedTime = 0;
+      document.getElementById('time').textContent = '00:00:00';
+      document.getElementById('laps').innerHTML = '';
+    }
+
+    function recordLap() {
+      if (timerInterval) {
+        const lapTime = document.getElementById('time').textContent;
+        const lapItem = document.createElement('li');
+        lapItem.textContent = Lap: ${lapTime};
+        document.getElementById('laps').appendChild(lapItem);
+      }
+    }
+  </script>
+</body>
+</html>
